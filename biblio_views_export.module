@@ -1,0 +1,61 @@
+<?php
+
+/**
+ * Implements hook_views_api().
+ */
+function biblio_views_export_views_api() {
+  return array(
+    'api' => 3,
+    'path' => drupal_get_path('module', 'biblio_views_export') . '/views',
+  );
+}
+
+/**
+ * Create biblio views export form.
+ *
+ * Form with nids as a hidden element and a submit button for every export format
+ *
+ * @param $form array Current form.
+ * @param $form_state array Current form state.
+ *
+ * @return array
+ */
+function biblio_views_export_form($form, &$form_state) {
+  $form = array();
+  $export_links = module_invoke_all('biblio_export_link');
+  if (!empty($export_links)) {
+    if (is_array($form_state['build_info']['args'][0])) {
+      $nids = $form_state['build_info']['args'][0];
+      $form['intro'] = array(
+        '#type' => 'markup',
+        '#markup' => t('Export @count results', array('@count' => count($nids))) . ': ',
+      );
+      $form['nids'] = array(
+        '#type' => 'hidden',
+        '#value' => implode(',', $nids),
+      );
+      foreach ($export_links as $key => $link) {
+        $form['submit_' . $key] = array(
+          '#name' => $key,
+          '#type' => 'submit',
+          '#value' => $link['title'],
+          '#attributes' => array('title' => $link['attributes']['title']),
+        );
+      }
+    }
+  }
+  return $form;
+}
+
+/**
+ *
+ *
+ * @param $form
+ * @param $form_state
+ */
+function biblio_views_export_form_submit($form, &$form_state) {
+  $nids = explode(',', $form_state['values']['nids']);
+  $format = str_replace('submit', '', $form_state['clicked_button']['#name']);
+  module_invoke($format, 'biblio_export', $nids);
+  exit();
+}

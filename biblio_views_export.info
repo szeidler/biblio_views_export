@@ -1,0 +1,7 @@
+name = Biblio views export
+description = Provides biblio export field to use in views
+dependencies[] = biblio
+dependencies[] = ctools
+core = 7.x
+
+files[] = views/handlers/views_handler_biblio_exportlinks.inc
