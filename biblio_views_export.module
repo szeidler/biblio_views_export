@@ -1,6 +1,11 @@
 <?php
 
 /**
+ * @file
+ * Biblio views export module for a views based biblio mass export biblio.
+ */
+
+/**
  * Implements hook_views_api().
  */
 function biblio_views_export_views_api() {
@@ -13,12 +18,16 @@ function biblio_views_export_views_api() {
 /**
  * Create biblio views export form.
  *
- * Form with nids as a hidden element and a submit button for every export format
+ * Form with nids in a hidden element and a submit button for every available
+ *   export format
  *
- * @param $form array Current form.
- * @param $form_state array Current form state.
+ * @param array $form
+ *   Current form.
+ * @param array $form_state
+ *   Current form state.
  *
  * @return array
+ *   Modified form.
  */
 function biblio_views_export_form($form, &$form_state) {
   $form = array();
@@ -48,10 +57,12 @@ function biblio_views_export_form($form, &$form_state) {
 }
 
 /**
+ * Extract passed nids and format and invoke biblio_export function.
  *
- *
- * @param $form
- * @param $form_state
+ * @param array $form
+ *   Current form.
+ * @param array $form_state
+ *   Current form state after form submission and validation.
  */
 function biblio_views_export_form_submit($form, &$form_state) {
   $nids = explode(',', $form_state['values']['nids']);

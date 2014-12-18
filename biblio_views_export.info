@@ -1,4 +1,4 @@
-name = Biblio views export
+name = Biblio Views Export
 description = Provides biblio export field to use in views
 dependencies[] = biblio
 dependencies[] = ctools
